@@ -3,7 +3,7 @@
 Asteroids is my second [Boot.dev](https://www.boot.dev) project!
 
 Extensions after guided implementation:
-- [ ] Add a scoring system
+- [x] Add a scoring system
 - [ ] Implement multiple lives and respawning
 - [ ] Add an explosion effect for the asteroids
 - [ ] Add acceleration to the player movement

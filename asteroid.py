@@ -15,8 +15,9 @@ class Asteroid(CircleShape):
     
     def split(self):
         self.kill()
+        score = self.radius * ASTEROID_SCORE_FACTOR
         if self.radius <= ASTEROID_MIN_RADIUS:
-            return
+            return score
         
         angle = random.uniform(20, 50)
         vec1 = self.velocity.rotate(angle)
@@ -26,4 +27,5 @@ class Asteroid(CircleShape):
         ast1.velocity = vec1 * 1.2
         ast2 = Asteroid(self.position.x, self.position.y, new_radius)
         ast2.velocity = vec2 * 1.2
+        return score
 
