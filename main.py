@@ -1,8 +1,12 @@
 import pygame
 from sys import exit
-from constants import *
-from explosion import Explosion
-from explosionparticle import ExplosionParticle
+from constants import (
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+    SCORE_TICK_AMOUNT,
+    SCORE_TICK_COOLDOWN
+)
+from explosion import ExplosionParticle, explode
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
@@ -21,7 +25,8 @@ def main():
     ExplosionParticle.containers = (updatables, drawables)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    asteroidField = AsteroidField()
+    AsteroidField()
+
     score = 0
     score_tick_cooldown = SCORE_TICK_COOLDOWN
     lives = 3
@@ -36,14 +41,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        
+
         score_tick_cooldown -= dt
         if score_tick_cooldown < 0:
             score += SCORE_TICK_AMOUNT
             score_tick_cooldown += SCORE_TICK_COOLDOWN
 
         updatables.update(dt)
-        
+
         for asteroid in asteroids:
             if player.is_colliding(asteroid):
                 if lives == 0:
@@ -60,7 +65,7 @@ def main():
                     asteroid_score = asteroid.split()
                     if asteroid_score > 0:
                         score += asteroid_score
-                        Explosion(
+                        explode(
                                 asteroid.position.x,
                                 asteroid.position.y,
                                 asteroid_score,
@@ -71,7 +76,7 @@ def main():
         screen.fill("black")
         for drawable in drawables:
             drawable.draw(screen)
-        
+
         screen.blit(font.render(f"Score: {score}", True, "white"), (0, 0))
         screen.blit(font.render(f"Lives: {lives}", True, "white"), (0, 30))
 
@@ -80,4 +85,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
