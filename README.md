@@ -6,7 +6,7 @@ Extensions after guided implementation:
 - [x] Add a scoring system
 - [x] Implement multiple lives and respawning
 - [x] Add an explosion effect for the asteroids
-- [ ] Add acceleration to the player movement
+- [x] Add acceleration to the player movement
 - [ ] Make the objects wrap around the screen instead of disappearing
 - [ ] Add a background image
 - [ ] Create different weapon types
@@ -15,4 +15,3 @@ Extensions after guided implementation:
 - [ ] Add a shield power-up
 - [ ] Add a speed power-up
 - [ ] Add bombs that can be dropped
-
