@@ -47,6 +47,7 @@ class Player(CircleShape):
 
     def move(self, dt):
         self.position += self.velocity * dt
+        self.wrap()
 
     def update(self, dt):
         if self.cooldown_timer < dt:
