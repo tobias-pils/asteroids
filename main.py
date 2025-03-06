@@ -36,6 +36,7 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
     font = pygame.font.Font(None, 25)
+    background_image = pygame.image.load("./assets/space.jpg")
 
     while True:
         for event in pygame.event.get():
@@ -73,7 +74,7 @@ def main():
                                 )
                     shot.kill()
 
-        screen.fill("black")
+        screen.blit(background_image, (0, 0))
         for drawable in drawables:
             drawable.draw(screen)
 
