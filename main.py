@@ -1,3 +1,4 @@
+from typing import Self
 import pygame
 from sys import exit
 from constants import (
@@ -80,6 +81,14 @@ def main():
 
         screen.blit(font.render(f"Score: {score}", True, "white"), (0, 0))
         screen.blit(font.render(f"Lives: {lives}", True, "white"), (0, 30))
+
+        top = 60
+        for i in range(len(player.weapons)):
+            if i == player.selected_weapon:
+                font.bold = True
+            screen.blit(font.render(player.weapons[i].name, True, "white"), (0, top))
+            font.bold = False
+            top += 20
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000

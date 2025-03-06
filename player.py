@@ -1,14 +1,14 @@
 from circleshape import CircleShape
-from shot import Shot
 from constants import (
     PLAYER_ACCELERATION,
-    PLAYER_SHOOT_COOLDOWN,
-    PLAYER_SHOOT_SPEED,
     PLAYER_RADIUS,
     PLAYER_MAX_SPEED,
     PLAYER_TURN_SPEED
 )
 import pygame
+from weapons.simpleweapon import SimpleWeapon
+from weapons.scattergun import ScatterGun
+from weapons.eruptiongun import EruptionGun
 
 class Player(CircleShape):
     def __init__(self, x, y):
@@ -17,6 +17,8 @@ class Player(CircleShape):
         self.cooldown_timer = 0
         self.init_x = x
         self.init_y = y
+        self.weapons = [SimpleWeapon(), ScatterGun(), EruptionGun()]
+        self.selected_weapon = 0
 
     def get_forward(self):
         return pygame.Vector2(0, 1).rotate(self.rotation)
@@ -69,10 +71,20 @@ class Player(CircleShape):
         self.move(dt)
 
         if keys[pygame.K_SPACE] and self.cooldown_timer == 0:
-            self.cooldown_timer = PLAYER_SHOOT_COOLDOWN
+            self.cooldown_timer = self.weapons[self.selected_weapon].shoot_cooldown
             self.shoot()
 
+        if keys[pygame.K_1]:
+            self.switch_weapon(0)
+        if keys[pygame.K_2]:
+            self.switch_weapon(1)
+        if keys[pygame.K_3]:
+            self.switch_weapon(2)
+
+    def switch_weapon(self, index):
+        if index >= 0 and index < len(self.weapons):
+            self.selected_weapon = index
+            self.cooldown_timer = self.weapons[index].shoot_cooldown
+
     def shoot(self):
-        shot = Shot(self.position.x, self.position.y)
-        forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        shot.velocity = forward * PLAYER_SHOOT_SPEED
+        self.weapons[self.selected_weapon].shoot(self.position, self.get_forward())
