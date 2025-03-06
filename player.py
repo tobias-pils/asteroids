@@ -8,7 +8,14 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.cooldown_timer = 0
-        
+        self.init_x = x
+        self.init_y = y
+
+    def respawn(self):
+        self.position.x = self.init_x
+        self.position.y = self.init_y
+        self.rotation = 0
+
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5

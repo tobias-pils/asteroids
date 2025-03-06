@@ -21,6 +21,7 @@ def main():
     asteroidField = AsteroidField()
     score = 0
     score_tick_cooldown = SCORE_TICK_COOLDOWN
+    lives = 3
 
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -42,9 +43,15 @@ def main():
         
         for asteroid in asteroids:
             if player.is_colliding(asteroid):
-                print("\nGAME OVER!")
-                print(f"You scored {score} points :)")
-                exit()
+                if lives == 0:
+                    print("\nGAME OVER!")
+                    print(f"You scored {score} points :)")
+                    exit()
+                lives -= 1
+                for a in asteroids:
+                    a.kill()
+                player.respawn()
+                break
             for shot in shots:
                 if asteroid.is_colliding(shot):
                     score += asteroid.split()
@@ -54,7 +61,8 @@ def main():
         for drawable in drawables:
             drawable.draw(screen)
         
-        screen.blit(font.render(f"Score: {score}", True, "white"), (0,0))
+        screen.blit(font.render(f"Score: {score}", True, "white"), (0, 0))
+        screen.blit(font.render(f"Lives: {lives}", True, "white"), (0, 30))
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
