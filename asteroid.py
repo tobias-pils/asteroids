@@ -1,3 +1,4 @@
+from token import LEFTSHIFT
 import pygame
 import random
 import math
@@ -20,14 +21,14 @@ class Asteroid(pygame.sprite.Sprite):
         self.velocity = pygame.Vector2(0, 0)
 
         # create left circle
-        self.left_radius = radius + random.randrange(2, 10)
-        self.left_position = pygame.Vector2(-1, 0).rotate(random.randrange(-60, 60))
-        self.left_position.scale_to_length(random.randrange(1, radius))
+        self.left_radius = radius + random.randint(2, 10)
+        self.left_position = pygame.Vector2(-1, 0).rotate(random.randint(-45, 45))
+        self.left_position.scale_to_length(random.randrange(5, self.left_radius))
 
         # create right circle
-        self.right_radius = radius + random.randrange(2, 10)
-        self.right_position = pygame.Vector2(1, 0).rotate(random.randrange(-60, 60))
-        self.right_position.scale_to_length(random.randrange(1, radius))
+        self.right_radius = radius + random.randint(2, 10)
+        self.right_position = pygame.Vector2(1, 0).rotate(random.randint(-45, 45))
+        self.right_position.scale_to_length(random.randrange(5, self.right_radius))
 
         # find angles for drawing arcs
         dist_sqr = self.left_position.distance_squared_to(self.right_position)
@@ -68,7 +69,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.wrap()
 
     def wrap(self):
-        margin = 20
+        margin = 30
         left_absolute_position = self.position + self.left_position
         right_absolute_position = self.position + self.right_position
 

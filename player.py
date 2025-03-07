@@ -21,6 +21,7 @@ class Player(CircleShape):
         self.init_y = y
         self.weapons = [SimpleWeapon(), ScatterGun(), EruptionGun()]
         self.selected_weapon = 0
+        self.dead = False
 
     def get_forward(self):
         return pygame.Vector2(0, 1).rotate(self.rotation)
@@ -30,6 +31,7 @@ class Player(CircleShape):
         self.position.x = self.init_x
         self.position.y = self.init_y
         self.rotation = 0
+        self.dead = False
 
     def triangle(self):
         forward = self.get_forward()
@@ -40,6 +42,8 @@ class Player(CircleShape):
         return [a, b, c]
 
     def draw(self, screen):
+        if self.dead:
+            return
         pygame.draw.polygon(screen, "white", self.triangle(), 2)
 
     def rotate(self, dt):
