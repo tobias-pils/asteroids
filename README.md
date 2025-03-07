@@ -10,7 +10,7 @@ Extensions after guided implementation:
 - [x] Make the objects wrap around the screen instead of disappearing
 - [x] Add a background image
 - [x] Create different weapon types
-- [ ] Make the asteroids lumpy instead of perfectly round
+- [x] Make the asteroids lumpy instead of perfectly round
 - [ ] Make the ship have a triangular hit box instead of a circular one
 - [ ] Add a shield power-up
 - [ ] Add a speed power-up

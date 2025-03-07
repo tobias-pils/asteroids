@@ -3,7 +3,9 @@ from constants import (
     PLAYER_ACCELERATION,
     PLAYER_RADIUS,
     PLAYER_MAX_SPEED,
-    PLAYER_TURN_SPEED
+    PLAYER_TURN_SPEED,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH
 )
 import pygame
 from weapons.simpleweapon import SimpleWeapon
@@ -50,6 +52,16 @@ class Player(CircleShape):
     def move(self, dt):
         self.position += self.velocity * dt
         self.wrap()
+
+    def wrap(self):
+        if self.position.x + self.radius < 0:
+            self.position.x = self.radius + SCREEN_WIDTH
+        if self.position.x - self.radius > SCREEN_WIDTH:
+            self.position.x = -self.radius
+        if self.position.y + self.radius < 0:
+            self.position.y = self.radius + SCREEN_HEIGHT
+        if self.position.y - self.radius > SCREEN_HEIGHT:
+            self.position.y = -self.radius
 
     def update(self, dt):
         if self.cooldown_timer < dt:
