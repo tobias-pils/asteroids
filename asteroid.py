@@ -55,13 +55,13 @@ class Asteroid(pygame.sprite.Sprite):
             left_absolute_position.y - self.left_radius,
             self.left_radius * 2,
             self.left_radius * 2)
-        left_rect = pygame.Rect(
+        right_rect = pygame.Rect(
             right_absolute_position.x - self.right_radius,
             right_absolute_position.y - self.right_radius,
             self.right_radius * 2,
             self.right_radius * 2)
         pygame.draw.arc(screen, "white", left_rect, self.left_start_angle, self.left_stop_angle , 2)
-        pygame.draw.arc(screen, "white", left_rect, self.right_start_angle, self.right_stop_angle , 2)
+        pygame.draw.arc(screen, "white", right_rect, self.right_start_angle, self.right_stop_angle , 2)
 
     def update(self, dt):
         self.position += self.velocity * dt
@@ -97,15 +97,15 @@ class Asteroid(pygame.sprite.Sprite):
         ast2.velocity = vec2 * 1.2
         return score
 
-    def is_colliding(self, other):
+    def is_point_inside(self, point):
         left_absolute_position = self.position + self.left_position
-        left_distance = left_absolute_position.distance_to(other.position)
-        if left_distance <= self.left_radius + other.radius:
+        left_distance = left_absolute_position.distance_to(point)
+        if left_distance <= self.left_radius:
             return True
 
         right_absolute_position = self.position + self.right_position
-        right_distance = right_absolute_position.distance_to(other.position)
-        if right_distance <= self.right_radius + other.radius:
+        right_distance = right_absolute_position.distance_to(point)
+        if right_distance <= self.right_radius:
             return True
 
         return False

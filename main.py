@@ -52,7 +52,12 @@ def main():
         updatables.update(dt)
 
         for asteroid in asteroids:
-            if player.is_colliding(asteroid):
+            is_colliding = False
+            for point in player.triangle():
+                if asteroid.is_point_inside(point):
+                    is_colliding = True
+                    break
+            if is_colliding:
                 if lives == 0:
                     print("\nGAME OVER!")
                     print(f"You scored {score} points :)")

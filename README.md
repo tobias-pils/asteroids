@@ -11,7 +11,7 @@ Extensions after guided implementation:
 - [x] Add a background image
 - [x] Create different weapon types
 - [x] Make the asteroids lumpy instead of perfectly round
-- [ ] Make the ship have a triangular hit box instead of a circular one
+- [x] Make the ship have a triangular hit box instead of a circular one
 - [ ] Add a shield power-up
 - [ ] Add a speed power-up
 - [ ] Add bombs that can be dropped
