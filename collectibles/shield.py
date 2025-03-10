@@ -25,6 +25,10 @@ class Shield(pygame.sprite.Sprite):
         self.lifetime = COLLECTIBLE_SHIELD_LIFETIME
 
     def update(self, dt):
+        self.lifetime -= dt
+        if self.lifetime < 0:
+            self.kill()
+
         self.resize_ms += dt * 1000
         ms_per_phase = 50
         num_phases = 20

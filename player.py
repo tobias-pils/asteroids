@@ -24,6 +24,7 @@ class Player(CircleShape):
         self.selected_weapon = 0
         self.dead = False
         self.is_shielded = False
+        self.boosted_time = 0
         self.lives = lives
 
     def get_forward(self):
@@ -35,13 +36,16 @@ class Player(CircleShape):
         self.position.y = self.init_y
         self.rotation = 0
         self.dead = False
+        self.is_shielded = False
+        self.boosted_time = 0
 
-    def triangle(self):
+    def triangle(self, scale=1.0):
+        scaled_radius = self.radius * scale
         forward = self.get_forward()
-        right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
-        a = self.position + forward * self.radius
-        b = self.position - forward * self.radius - right
-        c = self.position - forward * self.radius + right
+        right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * scaled_radius / 1.5
+        a = self.position + forward * scaled_radius
+        b = self.position - forward * scaled_radius - right
+        c = self.position - forward * scaled_radius + right
         return [a, b, c]
 
     def draw(self, screen):
@@ -51,13 +55,23 @@ class Player(CircleShape):
         if self.is_shielded:
             pygame.draw.circle(screen, "white", self.position, self.radius + 4, 1)
             pygame.draw.circle(screen, "white", self.position, self.radius + 7, 2)
+        if self.boosted_time > 0:
+            pygame.draw.polygon(screen, "white", self.triangle(1.2), 1)
+            pygame.draw.polygon(screen, "white", self.triangle(1.1), 1)
+            pygame.draw.polygon(screen, "white", self.triangle(0.9), 1)
+            pygame.draw.polygon(screen, "white", self.triangle(0.8), 1)
+
+    def boost_factor(self):
+        if self.boosted_time > 0:
+            return 2
+        return 1
 
     def rotate(self, dt):
-        self.rotation += PLAYER_TURN_SPEED * dt
+        self.rotation += PLAYER_TURN_SPEED * dt * self.boost_factor()
 
     def accelerate_move(self, dt):
-        self.velocity += self.get_forward() * dt * PLAYER_ACCELERATION
-        self.velocity.clamp_magnitude_ip(PLAYER_MAX_SPEED)
+        self.velocity += self.get_forward() * dt * PLAYER_ACCELERATION * self.boost_factor()
+        self.velocity.clamp_magnitude_ip(PLAYER_MAX_SPEED * self.boost_factor())
 
     def move(self, dt):
         self.position += self.velocity * dt
@@ -78,6 +92,8 @@ class Player(CircleShape):
             self.cooldown_timer = 0
         elif self.cooldown_timer > 0:
             self.cooldown_timer -= dt
+
+        self.boosted_time -= dt
 
         keys = pygame.key.get_pressed()
 

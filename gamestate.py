@@ -11,6 +11,7 @@ from asteroid import Asteroid
 from shot import Shot
 from explosion import ExplosionParticle
 from collectibles.shield import Shield
+from collectibles.speed import Speed
 
 class GameState():
     def __init__(self):
@@ -34,6 +35,7 @@ class GameState():
         Shot.containers = (updatables, drawables, shots)
         ExplosionParticle.containers = (updatables, drawables, effects)
         Shield.containers = (updatables, drawables, collectibles)
+        Speed.containers = (updatables, drawables, collectibles)
 
         return {
             "updatables": updatables,

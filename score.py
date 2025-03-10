@@ -1,5 +1,6 @@
 from constants import SCORE_TICK_AMOUNT, SCORE_TICK_COOLDOWN
 from collectibles.shield import Shield
+from collectibles.speed import Speed
 
 def score_tick(dt, gamestate):
     gamestate.score_tick_cooldown -= dt
@@ -12,3 +13,5 @@ def score_add(amount, gamestate):
     gamestate.score += amount
     if gamestate.score // 1000 > old_score // 1000:
         Shield()
+    if (gamestate.score + 500) // 1000 > (old_score + 500) // 1000:
+        Speed()
