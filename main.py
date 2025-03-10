@@ -6,6 +6,7 @@ from constants import (
     SCORE_TICK_AMOUNT,
     SCORE_TICK_COOLDOWN
 )
+from score import score_tick
 from ui import Ui
 from gamestate import GameState
 
@@ -32,10 +33,7 @@ def main():
             else:
                 gamestate.player.respawn()
         else:
-            gamestate.score_tick_cooldown -= dt
-            if gamestate.score_tick_cooldown < 0:
-                gamestate.score += SCORE_TICK_AMOUNT
-                gamestate.score_tick_cooldown += SCORE_TICK_COOLDOWN
+            score_tick(dt, gamestate)
 
             gamestate.groups["updatables"].update(dt)
 

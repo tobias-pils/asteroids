@@ -1,7 +1,11 @@
 import pygame
 import random
 
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import (
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+    COLLECTIBLE_SHIELD_LIFETIME
+)
 
 class Shield(pygame.sprite.Sprite):
     WIDTH = 20
@@ -18,6 +22,7 @@ class Shield(pygame.sprite.Sprite):
         self.init_x = self.x = random.randint(0, SCREEN_WIDTH - self.width)
         self.init_y = self.y = random.randint(0, SCREEN_HEIGHT)
         self.resize_ms = 0
+        self.lifetime = COLLECTIBLE_SHIELD_LIFETIME
 
     def update(self, dt):
         self.resize_ms += dt * 1000
@@ -32,15 +37,17 @@ class Shield(pygame.sprite.Sprite):
         self.width = Shield.WIDTH + resize
         self.height = Shield.HEIGHT + resize
 
-    def draw(self, screen):
-        points = [
+    def points(self):
+        return [
             (self.x, self.y), # top_left
             (self.x + self.width, self.y), # top_right
             (self.x + self.width, self.y + self.width), # bottom_right
             (self.x + self.width / 2, self.y + self.height), # bottom_middle
             (self.x, self.y + self.width) # bottom_left
         ]
-        pygame.draw.polygon(screen, "white", points, 2)
+
+    def draw(self, screen):
+        pygame.draw.polygon(screen, "white", self.points(), 2)
 
     def is_point_inside(self, point):
         # point is to the left, above or to the right

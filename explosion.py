@@ -11,7 +11,7 @@ def explode(x, y, size, impact_velocity):
     for i in range(num_particles):
         particle_velocity = base_velocity.rotate(360 / num_particles * i + random.random() * 5) * random.random()
         particle_velocity += impact_velocity * 0.01
-        lifetime = particle_velocity.length_squared() / 3000
+        lifetime = particle_velocity.length_squared() / 5000
         ExplosionParticle(x, y, particle_velocity, lifetime)
 
 class ExplosionParticle(CircleShape):

@@ -1,5 +1,6 @@
 import explosion
 from constants import ASTEROID_MIN_RADIUS, ASTEROID_SCORE_FACTOR
+from score import score_add
 
 def check_asteroid_collision(gamestate):
     for asteroid in gamestate.groups["asteroids"]:
@@ -28,13 +29,15 @@ def check_asteroid_collision(gamestate):
                     a.kill()
                 for s in gamestate.groups["shots"]:
                     s.kill()
+                for c in gamestate.groups["collectibles"]:
+                    c.kill()
                 gamestate.player.dead = True
                 break
         for shot in gamestate.groups["shots"]:
             if asteroid.is_point_inside(shot.position):
                 asteroid_score = asteroid.split()
                 if asteroid_score > 0:
-                    gamestate.score += asteroid_score
+                    score_add(asteroid_score, gamestate)
                     explosion.explode(
                             asteroid.position.x,
                             asteroid.position.y,
@@ -50,6 +53,11 @@ def check_collectible_collision(gamestate):
             if collectible.is_point_inside(point):
                 is_colliding = True
                 break
+        if not is_colliding:
+            for point in collectible.points():
+                if gamestate.player.is_point_inside(point):
+                    is_colliding = True
+                    break
         if is_colliding:
             if collectible.apply_to_player(gamestate.player):
                 collectible.kill()

@@ -50,6 +50,7 @@ class Player(CircleShape):
         pygame.draw.polygon(screen, "white", self.triangle(), 2)
         if self.is_shielded:
             pygame.draw.circle(screen, "white", self.position, self.radius + 4, 1)
+            pygame.draw.circle(screen, "white", self.position, self.radius + 7, 2)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -109,3 +110,7 @@ class Player(CircleShape):
 
     def shoot(self):
         self.weapons[self.selected_weapon].shoot(self.position, self.get_forward())
+
+    def is_point_inside(self, point):
+        # TODO: implement
+        return False
