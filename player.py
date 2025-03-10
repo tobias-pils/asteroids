@@ -22,6 +22,7 @@ class Player(CircleShape):
         self.weapons = [SimpleWeapon(), ScatterGun(), EruptionGun()]
         self.selected_weapon = 0
         self.dead = False
+        self.is_shielded = False
 
     def get_forward(self):
         return pygame.Vector2(0, 1).rotate(self.rotation)
@@ -45,6 +46,8 @@ class Player(CircleShape):
         if self.dead:
             return
         pygame.draw.polygon(screen, "white", self.triangle(), 2)
+        if self.is_shielded:
+            pygame.draw.circle(screen, "white", self.position, self.radius + 4, 1)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt

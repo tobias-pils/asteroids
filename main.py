@@ -2,6 +2,8 @@ from typing import Self
 import pygame
 from sys import exit
 from constants import (
+    ASTEROID_MIN_RADIUS,
+    ASTEROID_SCORE_FACTOR,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     SCORE_TICK_AMOUNT,
@@ -12,6 +14,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from collectibles.shield import Shield
 
 def main():
     updatables = pygame.sprite.Group()
@@ -19,12 +22,14 @@ def main():
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     effects = pygame.sprite.Group()
+    collectibles = pygame.sprite.Group()
 
     Player.containers = (updatables, drawables)
     Asteroid.containers = (updatables, drawables, asteroids)
     AsteroidField.containers = (updatables)
     Shot.containers = (updatables, drawables, shots)
     ExplosionParticle.containers = (updatables, drawables, effects)
+    Shield.containers = (updatables, drawables, collectibles)
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     AsteroidField()
@@ -61,23 +66,33 @@ def main():
             updatables.update(dt)
 
             for asteroid in asteroids:
-                is_colliding = False
+                is_colliding = None
                 for point in player.triangle():
                     if asteroid.is_point_inside(point):
-                        is_colliding = True
+                        is_colliding = asteroid
                         break
-                if is_colliding:
-                    if lives == 0:
-                        print("\nGAME OVER!")
-                        print(f"You scored {score} points :)")
-                        exit()
-                    lives -= 1
-                    for a in asteroids:
-                        a.kill()
-                    for s in shots:
-                        s.kill()
-                    player.dead = True
-                    break
+                if is_colliding != None:
+                    if player.is_shielded:
+                        player.is_shielded = False
+                        asteroid.kill()
+                        explode(
+                                asteroid.position.x,
+                                asteroid.position.y,
+                                ASTEROID_MIN_RADIUS * ASTEROID_SCORE_FACTOR,
+                                player.velocity * 5
+                                )
+                    else:
+                        if lives == 0:
+                            print("\nGAME OVER!")
+                            print(f"You scored {score} points :)")
+                            exit()
+                        lives -= 1
+                        for a in asteroids:
+                            a.kill()
+                        for s in shots:
+                            s.kill()
+                        player.dead = True
+                        break
                 for shot in shots:
                     if asteroid.is_point_inside(shot.position):
                         asteroid_score = asteroid.split()
@@ -90,6 +105,15 @@ def main():
                                     shot.velocity
                                     )
                         shot.kill()
+            for collectible in collectibles:
+                is_colliding = False
+                for point in player.triangle():
+                    if collectible.is_point_inside(point):
+                        is_colliding = True
+                        break
+                if is_colliding:
+                    if collectible.apply_to_player(player):
+                        collectible.kill()
 
         for drawable in drawables:
             drawable.draw(screen)

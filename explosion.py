@@ -1,6 +1,8 @@
 import pygame
 import random
 from circleshape import CircleShape
+from constants import SCREEN_WIDTH
+from constants import SCREEN_HEIGHT
 
 def explode(x, y, size, impact_velocity):
     num_particles = size * random.randrange(1, 10) // 20
@@ -26,3 +28,10 @@ class ExplosionParticle(CircleShape):
         if self.lifetime <= 0:
             self.kill()
         self.position += self.velocity * dt
+        if (
+            self.position.x < 0
+            or self.position.x > SCREEN_WIDTH
+            or self.position.y < 0
+            or self.position.y > SCREEN_HEIGHT
+        ):
+            self.kill()
