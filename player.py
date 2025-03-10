@@ -3,6 +3,7 @@ from constants import (
     PLAYER_ACCELERATION,
     PLAYER_RADIUS,
     PLAYER_MAX_SPEED,
+    PLAYER_START_LIVES,
     PLAYER_TURN_SPEED,
     SCREEN_HEIGHT,
     SCREEN_WIDTH
@@ -13,7 +14,7 @@ from weapons.scattergun import ScatterGun
 from weapons.eruptiongun import EruptionGun
 
 class Player(CircleShape):
-    def __init__(self, x, y):
+    def __init__(self, x, y, lives):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.cooldown_timer = 0
@@ -23,6 +24,7 @@ class Player(CircleShape):
         self.selected_weapon = 0
         self.dead = False
         self.is_shielded = False
+        self.lives = lives
 
     def get_forward(self):
         return pygame.Vector2(0, 1).rotate(self.rotation)
