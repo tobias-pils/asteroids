@@ -6,7 +6,7 @@ def check_asteroid_collision(gamestate):
     for asteroid in gamestate.groups["asteroids"]:
         is_colliding = None
         for point in gamestate.player.triangle():
-            if asteroid.is_point_inside(point):
+            if asteroid.is_overlapping(point):
                 is_colliding = asteroid
                 break
         if is_colliding != None:
@@ -34,7 +34,7 @@ def check_asteroid_collision(gamestate):
                 gamestate.player.dead = True
                 break
         for shot in gamestate.groups["shots"]:
-            if asteroid.is_point_inside(shot.position):
+            if asteroid.is_overlapping(shot.position):
                 asteroid_score = asteroid.split()
                 if asteroid_score > 0:
                     score_add(asteroid_score, gamestate)
@@ -45,6 +45,17 @@ def check_asteroid_collision(gamestate):
                             shot.velocity
                             )
                 shot.kill()
+        for blast in gamestate.groups["blasts"]:
+            if asteroid.is_overlapping(blast.position, blast.radius):
+                asteroid_score = asteroid.split()
+                if asteroid_score > 0:
+                    score_add(asteroid_score, gamestate)
+                    explosion.explode(
+                            asteroid.position.x,
+                            asteroid.position.y,
+                            asteroid_score,
+                            asteroid.velocity
+                            )
 
 def check_collectible_collision(gamestate):
     for collectible in gamestate.groups["collectibles"]:

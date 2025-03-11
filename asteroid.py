@@ -98,15 +98,15 @@ class Asteroid(pygame.sprite.Sprite):
         ast2.velocity = vec2 * 1.2
         return score
 
-    def is_point_inside(self, point):
+    def is_overlapping(self, position, radius=0):
         left_absolute_position = self.position + self.left_position
-        left_distance = left_absolute_position.distance_to(point)
-        if left_distance <= self.left_radius:
+        left_distance = left_absolute_position.distance_to(position)
+        if left_distance <= self.left_radius + radius:
             return True
 
         right_absolute_position = self.position + self.right_position
-        right_distance = right_absolute_position.distance_to(point)
-        if right_distance <= self.right_radius:
+        right_distance = right_absolute_position.distance_to(position)
+        if right_distance <= self.right_radius + radius:
             return True
 
         return False

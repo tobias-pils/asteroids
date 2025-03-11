@@ -3,7 +3,6 @@ from constants import (
     PLAYER_ACCELERATION,
     PLAYER_RADIUS,
     PLAYER_MAX_SPEED,
-    PLAYER_START_LIVES,
     PLAYER_TURN_SPEED,
     SCREEN_HEIGHT,
     SCREEN_WIDTH
@@ -12,12 +11,15 @@ import pygame
 from weapons.simpleweapon import SimpleWeapon
 from weapons.scattergun import ScatterGun
 from weapons.eruptiongun import EruptionGun
+from constants import BOMB_COOLDOWN
+from weapons.bomb import Bomb
 
 class Player(CircleShape):
     def __init__(self, x, y, lives):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
-        self.cooldown_timer = 0
+        self.shoot_cooldown_timer = 0
+        self.bomb_cooldown_timer = 0
         self.init_x = x
         self.init_y = y
         self.weapons = [SimpleWeapon(), ScatterGun(), EruptionGun()]
@@ -88,10 +90,15 @@ class Player(CircleShape):
             self.position.y = -self.radius
 
     def update(self, dt):
-        if self.cooldown_timer < dt:
-            self.cooldown_timer = 0
-        elif self.cooldown_timer > 0:
-            self.cooldown_timer -= dt
+        if self.shoot_cooldown_timer < dt:
+            self.shoot_cooldown_timer = 0
+        elif self.shoot_cooldown_timer > 0:
+            self.shoot_cooldown_timer -= dt
+
+        if self.bomb_cooldown_timer < dt:
+            self.bomb_cooldown_timer = 0
+        elif self.bomb_cooldown_timer > 0:
+            self.bomb_cooldown_timer -= dt
 
         self.boosted_time -= dt
 
@@ -108,9 +115,13 @@ class Player(CircleShape):
             self.accelerate_move(-dt)
         self.move(dt)
 
-        if keys[pygame.K_SPACE] and self.cooldown_timer == 0:
-            self.cooldown_timer = self.weapons[self.selected_weapon].shoot_cooldown
+        if keys[pygame.K_SPACE] and self.shoot_cooldown_timer == 0:
+            self.shoot_cooldown_timer = self.weapons[self.selected_weapon].shoot_cooldown
             self.shoot()
+
+        if keys[pygame.K_e] and self.bomb_cooldown_timer == 0:
+            self.bomb_cooldown_timer = BOMB_COOLDOWN
+            self.place_bomb()
 
         if keys[pygame.K_1]:
             self.switch_weapon(0)
@@ -122,10 +133,13 @@ class Player(CircleShape):
     def switch_weapon(self, index):
         if index >= 0 and index < len(self.weapons):
             self.selected_weapon = index
-            self.cooldown_timer = self.weapons[index].shoot_cooldown
+            self.shoot_cooldown_timer = self.weapons[index].shoot_cooldown
 
     def shoot(self):
         self.weapons[self.selected_weapon].shoot(self.position, self.get_forward())
+
+    def place_bomb(self):
+        Bomb(self.position.x, self.position.y)
 
     def is_point_inside(self, point):
         # TODO: implement

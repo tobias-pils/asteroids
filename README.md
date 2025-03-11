@@ -14,4 +14,4 @@ Extensions after guided implementation:
 - [x] Make the ship have a triangular hit box instead of a circular one
 - [x] Add a shield power-up
 - [x] Add a speed power-up
-- [ ] Add bombs that can be dropped
+- [x] Add bombs that can be dropped

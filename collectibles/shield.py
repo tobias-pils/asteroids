@@ -20,7 +20,7 @@ class Shield(pygame.sprite.Sprite):
         self.width = Shield.WIDTH
         self.height = Shield.HEIGHT
         self.init_x = self.x = random.randint(0, SCREEN_WIDTH - self.width)
-        self.init_y = self.y = random.randint(0, SCREEN_HEIGHT)
+        self.init_y = self.y = random.randint(0, SCREEN_HEIGHT - self.height)
         self.resize_ms = 0
         self.lifetime = COLLECTIBLE_SHIELD_LIFETIME
 

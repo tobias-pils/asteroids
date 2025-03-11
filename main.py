@@ -1,11 +1,6 @@
 import pygame
 from collision import check_asteroid_collision, check_collectible_collision
-from constants import (
-    SCREEN_HEIGHT,
-    SCREEN_WIDTH,
-    SCORE_TICK_AMOUNT,
-    SCORE_TICK_COOLDOWN
-)
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from score import score_tick
 from ui import Ui
 from gamestate import GameState

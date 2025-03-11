@@ -1,4 +1,4 @@
-from shot import Shot
+from weapons.shot import Shot
 from constants import PLAYER_SHOOT_SPEED
 
 class ScatterGun():
